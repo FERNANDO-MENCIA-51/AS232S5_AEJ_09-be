@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "rapidapi.url",
+      "type": "java.lang.String",
+      "description": "A description for 'rapidapi.url'"
+    },
+    {
+      "name": "rapidapi.host",
+      "type": "java.lang.String",
+      "description": "A description for 'rapidapi.host'"
+    },
+    {
+      "name": "rapidapi.apikey",
+      "type": "java.lang.String",
+      "description": "A description for 'rapidapi.apikey'"
+    },
+    {
+      "name": "nasa.url",
+      "type": "java.lang.String",
+      "description": "A description for 'nasa.url'"
+    },
+    {
+      "name": "nasa.apikey",
+      "type": "java.lang.String",
+      "description": "A description for 'nasa.apikey'"
+    }
+  ]
+}

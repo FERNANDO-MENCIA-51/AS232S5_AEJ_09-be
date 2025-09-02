@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: apis-ai-demos
+  
+  # Configuración R2DBC para Neon PostgreSQL
+  r2dbc:
+    url: r2dbc:postgresql://ep-billowing-queen-adp2gox4-pooler.c-2.us-east-1.aws.neon.tech:5432/neondb?sslmode=require
+    username: neondb_owner
+    password: npg_Xy0FWDfi6AOt
+    pool:
+      enabled: true
+      initial-size: 5
+      max-size: 10
+      max-idle-time: 30m
+      validation-query: SELECT 1
+
+# Configuración del servidor
+server:
+  port: 8080
+
+# Configuración para RapidAPI - AI Detection
+rapidapi:
+  url: https://ai-detection4.p.rapidapi.com/v1/ai-detection-rapid-api
+  host: ai-detection4.p.rapidapi.com
+  apikey: 3f797b008emsh2e4ad644606c6b8p18678cjsn053f92651618
+
+# Configuración para NASA API
+nasa:
+  url: https://api.nasa.gov
+  apikey: JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd
+
+ 
+
+# Configuración de logging
+logging:
+  level:
+    "[io.r2dbc.postgresql.QUERY]": DEBUG # Para ver las consultas SQL
+    "[io.r2dbc.postgresql.PARAM]": DEBUG # Para ver los parámetros
+    "[org.springframework.r2dbc]": DEBUG # Para debugging de R2DBC
+
+# Configuración de SpringDoc OpenAPI/Swagger
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  show-actuator: true
