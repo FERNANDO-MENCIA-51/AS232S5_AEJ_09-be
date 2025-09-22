@@ -1,0 +1,6 @@
+# kubectl create namespace apis-ai-demos (COMANDO)
+# kubectl apply -f 1-namespace.yml (yml)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apis-ai-demos

@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: apis-ai-demos
+  
+  # Configuración R2DBC para contenedor Docker
+  r2dbc:
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://postgres:5432/apisaidemos}
+    username: ${SPRING_R2DBC_USERNAME:admin}
+    password: ${SPRING_R2DBC_PASSWORD:admin123}
+    pool:
+      enabled: true
+      initial-size: 5
+      max-size: 10
+      max-idle-time: 30m
+      validation-query: SELECT 1
+
+# Configuración del servidor
+server:
+  port: 8080
+
+# Configuración para RapidAPI - AI Detection
+rapidapi:
+  url: https://ai-detection4.p.rapidapi.com/v1/ai-detection-rapid-api
+  host: ai-detection4.p.rapidapi.com
+  apikey: ${RAPIDAPI_APIKEY:3f797b008emsh2e4ad644606c6b8p18678cjsn053f92651618}
+
+# Configuración para NASA API
+nasa:
+  url: https://api.nasa.gov
+  apikey: ${NASA_APIKEY:JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd}
+
+# Configuración de logging para producción
+logging:
+  level:
+    root: INFO
+    pe.edu.vallegrande: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Configuración de management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,35 @@
+# kubectl apply -f 4-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apis-ai-demos
+  namespace: apis-ai-demos
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apis-ai-demos
+  template:
+    metadata:
+      labels:
+        app: apis-ai-demos
+    spec:
+      containers:
+      - name: apis-ai-demos
+        image: luismencia/apis-ai-demos:latest   # Tu imagen Docker Hub
+        imagePullPolicy: IfNotPresent            # Evitar traer siempre la última versión si hay una actual
+        ports:
+        - containerPort: 8080                    # Puerto de tu aplicación Spring Boot
+        envFrom:
+        - secretRef:
+            name: credentials  # Esto cargará todos los valores como variables de entorno
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker"                        # Usar el perfil docker
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
