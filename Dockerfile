@@ -12,7 +12,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY mvnw .
 COPY mvnw.cmd .
-COPY .mvn .mvn
+COPY .mvn/ .mvn/
 
 # Descargar dependencias (esto se cachea si no cambia el pom.xml)
 RUN mvn dependency:go-offline -B
