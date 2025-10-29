@@ -19,7 +19,7 @@ on:
   workflow_dispatch: # Permite ejecutar manualmente el workflow
 
 env:
-  DOCKER_IMAGE: fernando51/apis-ai-backend
+  DOCKER_IMAGE: luismencia/apis-ai-backend
   JAVA_VERSION: "21"
 
 jobs:
@@ -93,7 +93,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          dockerfile: Dockerfile
+          file: Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
