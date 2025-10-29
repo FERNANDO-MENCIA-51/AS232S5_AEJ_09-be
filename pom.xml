@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>pe.edu.vallegrande</groupId>
 	<artifactId>Ai-detection</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Ai-detection</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Backend API for AI Detection and NASA APOD</description>
 	<url/>
 	<licenses>
 		<license/>
