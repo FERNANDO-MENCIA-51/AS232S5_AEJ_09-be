@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://ep-long-grass-adsq34n7-pooler.c-2.us-east-1.aws.neon.tech:5432/neondb
+    username: neondb_owner
+    password: npg_oKi7MeRL5hqf
+    properties:
+      ssl: true
+      sslMode: require
+
+rapidapi:
+  url: https://ai-detection4.p.rapidapi.com
+  host: ai-detection4.p.rapidapi.com
+  apikey: 3f797b008emsh2e4ad644606c6b8p18678cjsn053f92651618
+
+nasa:
+  url: https://api.nasa.gov
+  apikey: JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

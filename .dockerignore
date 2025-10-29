@@ -1,0 +1,45 @@
+# Archivos de Git
+.git
+.gitignore
+.gitattributes
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos de construcción y dependencias
+target/
+node_modules/
+.m2/
+
+# Archivos de log
+*.log
+logs/
+
+# Archivos de configuración local
+.env
+.env.local
+*.env
+
+# Archivos de Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Archivos de documentación
+README.md
+*.md
+docs/
+
+# Archivos de test
+**/*test*
+**/*Test*
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db

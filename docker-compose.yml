@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: apis-ai-demos-db
+    environment:
+      POSTGRES_DB: apisaidemos
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/sql:/docker-entrypoint-initdb.d
+    networks:
+      - apis-ai-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d apisaidemos"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Aplicación Spring Boot
+  app:
+    build: .
+    container_name: apis-ai-demos-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # Configuración para la base de datos local
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/apisaidemos
+      SPRING_R2DBC_USERNAME: admin
+      SPRING_R2DBC_PASSWORD: admin123
+      SPRING_PROFILES_ACTIVE: docker
+      # Variables para las APIs externas (deberás configurar estas con tus claves)
+      RAPIDAPI_APIKEY: ${RAPIDAPI_APIKEY:-3f797b008emsh2e4ad644606c6b8p18678cjsn053f92651618}
+      NASA_APIKEY: ${NASA_APIKEY:-JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd}
+    networks:
+      - apis-ai-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  apis-ai-network:
+    driver: bridge
