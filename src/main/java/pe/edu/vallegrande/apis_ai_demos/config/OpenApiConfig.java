@@ -1,6 +1,5 @@
 package pe.edu.vallegrande.apis_ai_demos.config;
 
-
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +30,7 @@ public class OpenApiConfig implements WebFluxConfigurer {
                         .title("REST API - AI Detection Demo")
                         .description("API para testear detección de contenido generado por IA")
                         .license(new License().name("Valle Grande").url("https://vallegrande.edu.pe"))
-                        .version("1.0.0")
-                );
+                        .version("1.0.0"));
     }
 
     @Override
