@@ -8,7 +8,7 @@
 
 ¡Bienvenido a mi proyecto de demostración de APIs de Inteligencia Artificial! Este es un proyecto educativo donde exploro diferentes servicios de IA utilizando tecnologías modernas y reactivas.
 
-## 📋 Descripción del Proyecto
+## 📋 Descripción del Proyecto Ai
 
 Este proyecto integra múltiples APIs de servicios cognitivos y espaciales para demostrar cómo consumir y procesar datos de manera reactiva. Actualmente incluye:
 
