@@ -1,43 +1,19 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  # Base de datos PostgreSQL
-  postgres:
-    image: postgres:15
-    container_name: apis-ai-demos-db
-    environment:
-      POSTGRES_DB: apisaidemos
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./src/main/resources/sql:/docker-entrypoint-initdb.d
-    networks:
-      - apis-ai-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d apisaidemos"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
   # Aplicación Spring Boot
   app:
     image: ${APP_IMAGE:-luismencia/apis-ai-demos:latest}
     # Para construir localmente en lugar de usar imagen de Docker Hub, descomenta:
     # build: .
     container_name: apis-ai-demos-app
-    depends_on:
-      postgres:
-        condition: service_healthy
     ports:
       - "${APP_PORT:-8080}:${APP_PORT:-8080}"
     environment:
-      # Configuración para la base de datos local
-      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/apisaidemos
-      SPRING_R2DBC_USERNAME: admin
-      SPRING_R2DBC_PASSWORD: admin123
+      # Configuración para la base de datos Neon PostgreSQL (en la nube)
+      SPRING_R2DBC_URL: r2dbc:postgresql://ep-billowing-queen-adp2gox4-pooler.c-2.us-east-1.aws.neon.tech:5432/neondb?sslmode=require
+      SPRING_R2DBC_USERNAME: neondb_owner
+      SPRING_R2DBC_PASSWORD: npg_Xy0FWDfi6AOt
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: ${APP_PORT:-8080}
       # Variables para las APIs externas (deberás configurar estas con tus claves)
@@ -49,9 +25,6 @@ services:
 
     # Endpoint GET público de ejemplo (accesible en host):
     # http://localhost:${APP_PORT:-8080}/v1/api/ai-detection/health
-
-volumes:
-  postgres_data:
 
 networks:
   apis-ai-network:

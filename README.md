@@ -13,6 +13,7 @@
 Este proyecto integra múltiples APIs de servicios cognitivos y espaciales para demostrar cómo consumir y procesar datos de manera reactiva. Actualmente incluye:
 
 ### 🤖 **RapidAPI - AI Detection Service**
+
 ![RapidAPI](https://img.shields.io/badge/RapidAPI-AI%20Detection-purple?style=flat-square&logo=rapidapi)
 
 Servicio inteligente que detecta si un texto fue generado por inteligencia artificial. Utiliza algoritmos avanzados de machine learning para analizar patrones de escritura y determinar la probabilidad de que el contenido sea generado por IA.
@@ -22,6 +23,7 @@ Servicio inteligente que detecta si un texto fue generado por inteligencia artif
 </div>
 
 ### 🌌 **NASA APOD (Astronomy Picture of the Day)**
+
 ![NASA](https://img.shields.io/badge/NASA-APOD%20API-red?style=flat-square&logo=nasa)
 
 Integración con la API oficial de la NASA que proporciona acceso a la imagen astronómica del día, incluyendo fotografías espectaculares del espacio, explicaciones científicas y datos técnicos de cada imagen.
@@ -152,43 +154,188 @@ Integración con la API oficial de la NASA que proporciona acceso a la imagen as
 ## 🚀 Cómo Ejecutar el Proyecto
 
 ### 📋 **Prerrequisitos**
-- Java JDK 24 instalado
+
+#### **Opción 1: Con Docker (Recomendado)** 🐳
+
+- Docker instalado
+- Docker Compose instalado
+- Acceso a internet para descargar imágenes
+
+#### **Opción 2: Sin Docker**
+
+- Java JDK 21 o superior instalado
 - Maven configurado
+- PostgreSQL instalado y configurado
 - Acceso a internet para las APIs externas
 
-### ▶️ **Pasos para Ejecutar**
+---
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone [tu-repositorio]
-   cd apis-ai-demos
-   ```
+## 🐳 **Ejecución con Docker Compose (Recomendado)**
 
-2. **Compilar el proyecto**
-   ```bash
-   mvn clean compile
-   ```
+### **Paso 1: Ejecutar con Docker Compose**
 
-3. **Ejecutar la aplicación**
-   ```bash
-   mvn spring-boot:run
-   ```
+```bash
+# Iniciar todos los servicios (PostgreSQL + Aplicación)
+docker-compose up
 
-4. **Acceder a la documentación**
-   - ![Swagger](https://img.shields.io/badge/Swagger%20UI-localhost:8080/webjars/swagger--ui.html-green?logo=swagger) Swagger UI: http://localhost:8080/webjars/swagger-ui/index.html#/
-   - ![API Docs](https://img.shields.io/badge/API%20Docs-localhost:8080/v3/api--docs-blue?logo=swagger) API Docs: http://localhost:8080/v3/api-docs
+# O en modo detached (segundo plano)
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Detener servicios
+docker-compose down
+
+# Detener y eliminar volúmenes (limpieza completa)
+docker-compose down -v
+```
+
+### **Paso 2: Ejecutar en Puerto Personalizado**
+
+```bash
+# Ejecutar en puerto 9090
+APP_PORT=9090 docker-compose up
+
+# O configurar en archivo .env
+echo "APP_PORT=9090" >> .env
+docker-compose up
+```
+
+### **Paso 3: Acceder a la Aplicación**
+
+Una vez iniciado, la aplicación estará disponible en:
+
+- **API Base:** http://localhost:8080 (o tu puerto configurado)
+- **Swagger UI:** http://localhost:8080/webjars/swagger-ui/index.html
+- **API Docs:** http://localhost:8080/v3/api-docs
+- **Health Check:** http://localhost:8080/v1/api/ai-detection/health
+
+### **🔍 Verificar que Todo Funciona**
+
+```bash
+# Health check del servicio AI Detection
+curl http://localhost:8080/v1/api/ai-detection/health
+
+# Health check del servicio NASA APOD
+curl http://localhost:8080/v1/api/nasa-apod/health
+
+# Obtener imagen astronómica del día
+curl http://localhost:8080/v1/api/nasa-apod/today
+```
+
+---
+
+## 💻 **Ejecución Sin Docker (Desarrollo Local)**
+
+### **Paso 1: Configurar PostgreSQL**
+
+Asegúrate de tener PostgreSQL corriendo y crea la base de datos:
+
+```sql
+CREATE DATABASE apisaidemos;
+CREATE USER admin WITH PASSWORD 'admin123';
+GRANT ALL PRIVILEGES ON DATABASE apisaidemos TO admin;
+```
+
+### **Paso 2: Configurar Variables de Entorno**
+
+```bash
+# Linux/Mac
+export RAPIDAPI_APIKEY=tu_clave_aqui
+export NASA_APIKEY=tu_clave_aqui
+
+# Windows (CMD)
+set RAPIDAPI_APIKEY=tu_clave_aqui
+set NASA_APIKEY=tu_clave_aqui
+
+# Windows (PowerShell)
+$env:RAPIDAPI_APIKEY="tu_clave_aqui"
+$env:NASA_APIKEY="tu_clave_aqui"
+```
+
+### **Paso 3: Compilar y Ejecutar**
+
+```bash
+# Clonar el repositorio
+git clone [tu-repositorio]
+cd apis-ai-demos
+
+# Compilar el proyecto
+mvn clean compile
+
+# Ejecutar la aplicación
+mvn spring-boot:run
+
+# O ejecutar el JAR directamente
+mvn clean package -DskipTests
+java -jar target/apis-ai-demos-0.0.1-SNAPSHOT.jar
+```
+
+### **Paso 4: Acceder a la Documentación**
+
+- ![Swagger](https://img.shields.io/badge/Swagger%20UI-localhost:8080/webjars/swagger--ui.html-green?logo=swagger) **Swagger UI:** http://localhost:8080/webjars/swagger-ui/index.html
+- ![API Docs](https://img.shields.io/badge/API%20Docs-localhost:8080/v3/api--docs-blue?logo=swagger) **API Docs:** http://localhost:8080/v3/api-docs
 
 <div align="center">
   <img src="https://swagger.io/swagger/media/assets/images/swagger_logo.svg" alt="Swagger UI" width="200"/>
 </div>
 
+---
+
+## 🐋 **Imagen Docker Hub**
+
+### **Información de la Imagen**
+
+- **Repositorio:** `luismencia/apis-ai-demos`
+- **URL Docker Hub:** https://hub.docker.com/r/luismencia/apis-ai-demos
+- **Tags disponibles:** `latest`, versiones específicas
+
+### **Usar la Imagen Directamente**
+
+```bash
+# Descargar la imagen
+docker pull luismencia/apis-ai-demos:latest
+
+# Ejecutar solo la aplicación (requiere PostgreSQL externo)
+docker run -d \
+  -p 8080:8080 \
+  -e SPRING_R2DBC_URL=r2dbc:postgresql://tu-host:5432/apisaidemos \
+  -e SPRING_R2DBC_USERNAME=admin \
+  -e SPRING_R2DBC_PASSWORD=admin123 \
+  -e RAPIDAPI_APIKEY=tu_clave \
+  -e NASA_APIKEY=tu_clave \
+  --name apis-ai-demos \
+  luismencia/apis-ai-demos:latest
+
+# Ver logs
+docker logs -f apis-ai-demos
+
+# Detener y eliminar
+docker stop apis-ai-demos
+docker rm apis-ai-demos
+```
+
+### **Construir tu Propia Imagen**
+
+```bash
+# Construir imagen localmente
+docker build -t mi-apis-ai-demos:latest .
+
+# Ejecutar tu imagen
+docker run -d -p 8080:8080 mi-apis-ai-demos:latest
+```
+
 ## 🔗 Endpoints Disponibles
 
 ### 🤖 **AI Detection Service**
+
 ![POST](https://img.shields.io/badge/POST-/api/ai--detection-blue?style=flat-square)
+
 - `POST /api/ai-detection` - Detectar si un texto es generado por IA
 
 ### 🌌 **NASA APOD Service**
+
 ![GET](https://img.shields.io/badge/GET-/api/nasa/apod/today-green?style=flat-square)
 ![GET](https://img.shields.io/badge/GET-/api/nasa/apod/date/{date}-green?style=flat-square)
 ![GET](https://img.shields.io/badge/GET-/api/nasa/health-yellow?style=flat-square)
@@ -197,10 +344,10 @@ Integración con la API oficial de la NASA que proporciona acceso a la imagen as
 - `GET /api/nasa/apod/date/{date}` - Obtener imagen de una fecha específica
 - `GET /api/nasa/health` - Verificar estado del servicio
 
-
 ## 🔧 Configuración
 
 El proyecto utiliza un archivo `application.yml` para la configuración de:
+
 - Conexión a base de datos Neon PostgreSQL
 - Claves de API para RapidAPI y NASA
 - Configuración de pools de conexión
@@ -210,16 +357,19 @@ El proyecto utiliza un archivo `application.yml` para la configuración de:
 ## 🎯 Características Técnicas
 
 ### ⚡ **Programación Reactiva**
+
 - Uso de `Mono` y `Flux` para operaciones no bloqueantes
 - WebClient para llamadas HTTP reactivas
 - R2DBC para acceso reactivo a base de datos
 
 ### 🛡️ **Manejo de Errores**
+
 - Gestión centralizada de excepciones
 - Logging detallado para debugging
 - Respuestas HTTP apropiadas
 
 ### 📊 **Persistencia de Datos**
+
 - Almacenamiento de consultas realizadas
 - Esquemas SQL optimizados con índices
 - Pool de conexiones configurado para rendimiento
@@ -227,6 +377,7 @@ El proyecto utiliza un archivo `application.yml` para la configuración de:
 ## 🎓 Aprendizajes del Proyecto
 
 Este proyecto me ha permitido explorar y aprender:
+
 - Programación reactiva con Spring WebFlux
 - Integración con APIs externas de terceros
 - Manejo de bases de datos reactivas con R2DBC
