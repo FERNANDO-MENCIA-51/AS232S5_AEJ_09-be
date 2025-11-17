@@ -10,6 +10,7 @@ on:
       - "src/**"
       - "pom.xml"
       - "Dockerfile"
+      - "docker-compose-be.yml" 
       - ".github/workflows/dockerhub.yml"
   pull_request:
     branches:
