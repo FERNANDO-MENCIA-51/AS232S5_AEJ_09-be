@@ -79,7 +79,7 @@ public class AiDetectionController {
                 return aiDetectionService.detectAi(text, lang);
         }
 
-        @GetMapping(value = "/test-database", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/test-database", produces = MediaType.TEXT_PLAIN_VALUE)
         @Operation(summary = "Probar conexión con base de datos", description = "Endpoint para verificar que la conexión con PostgreSQL funciona correctamente")
         public Mono<String> testDatabase() {
                 AiDetectionQuery testQuery = new AiDetectionQuery("Test message", "en", 0.5, "TEST");
@@ -89,7 +89,7 @@ public class AiDetectionController {
                                 .onErrorReturn("Database connection: FAILED");
         }
 
-        @GetMapping(value = "/test-rapidapi", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/test-rapidapi", produces = MediaType.TEXT_PLAIN_VALUE)
         @Operation(summary = "Probar conexión con RapidAPI", description = "Endpoint para verificar que la conexión con RapidAPI funciona correctamente")
         public Mono<String> testRapidApi() {
                 return aiDetectionService.detectAi("This is a test message", "en")
@@ -98,7 +98,7 @@ public class AiDetectionController {
                                 .onErrorReturn("RapidAPI connection: FAILED");
         }
 
-        @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/health", produces = MediaType.TEXT_PLAIN_VALUE)
         @Operation(summary = "Verificar estado del servicio", description = "Endpoint para verificar que el servicio de detección de IA está funcionando")
         public Mono<String> healthCheck() {
                 return Mono.just("AI Detection Service is running!");
@@ -190,7 +190,7 @@ public class AiDetectionController {
                 log.info("=== GET AI DETECTION BY ID ===");
                 log.info("ID: {}", id);
 
-                return aiDetectionRepository.findById(id)
+                return aiDetectionRepository.findById(id != null ? id : 0L)
                                 .doOnSuccess(query -> log.info("Query found: {}", query))
                                 .switchIfEmpty(Mono.error(new ResponseStatusException(
                                                 HttpStatus.NOT_FOUND,
@@ -208,11 +208,11 @@ public class AiDetectionController {
                 log.info("=== DELETE AI DETECTION BY ID ===");
                 log.info("ID: {}", id);
 
-                return aiDetectionRepository.findById(id)
+                return aiDetectionRepository.findById(id != null ? id : 0L)
                                 .switchIfEmpty(Mono.error(new ResponseStatusException(
                                                 HttpStatus.NOT_FOUND,
                                                 "AI Detection query not found with ID: " + id)))
-                                .flatMap(query -> aiDetectionRepository.deleteById(id)
+                                .flatMap(query -> aiDetectionRepository.deleteById(query.getId() != null ? query.getId() : 0L)
                                                 .then(Mono.just("AI Detection query deleted successfully with ID: "
                                                                 + id)))
                                 .doOnSuccess(result -> log.info("Query deleted: {}", id));

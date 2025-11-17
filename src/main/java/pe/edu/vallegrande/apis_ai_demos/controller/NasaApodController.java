@@ -95,7 +95,7 @@ public class NasaApodController {
                                 .doOnError(error -> log.error("Error in APOD retrieval: {}", error.getMessage()));
         }
 
-        @GetMapping(value = "/test-nasa-api", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/test-nasa-api", produces = MediaType.TEXT_PLAIN_VALUE)
         @Operation(summary = "Probar conexión con NASA APOD API", description = "Endpoint para verificar que la conexión con NASA APOD API funciona correctamente")
         public Mono<String> testNasaApi() {
                 return nasaApodService.getTodayApod()
@@ -104,7 +104,7 @@ public class NasaApodController {
                                 .onErrorReturn("NASA APOD API connection: FAILED");
         }
 
-        @GetMapping(value = "/test-nasa-database", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/test-nasa-database", produces = MediaType.TEXT_PLAIN_VALUE)
         @Operation(summary = "Probar conexión con base de datos NASA APOD", description = "Endpoint para verificar que la conexión con PostgreSQL funciona correctamente para NASA APOD")
         public Mono<String> testNasaDatabase() {
                 NasaApodQuery testQuery = new NasaApodQuery(
@@ -123,7 +123,7 @@ public class NasaApodController {
                                 .onErrorReturn("NASA APOD Database connection: FAILED");
         }
 
-        @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/health", produces = MediaType.TEXT_PLAIN_VALUE)
         @Operation(summary = "Verificar estado del servicio NASA APOD", description = "Endpoint para verificar que el servicio de NASA APOD está funcionando")
         public Mono<String> healthCheck() {
                 return Mono.just("NASA APOD Service is running!");
@@ -174,7 +174,7 @@ public class NasaApodController {
                 log.info("=== SAVE NASA APOD QUERY ===");
                 log.info("Query: {}", query);
 
-                return nasaApodRepository.save(query)
+                return nasaApodRepository.save(java.util.Objects.requireNonNull(query))
                                 .doOnSuccess(saved -> log.info("Query saved with ID: {}", saved.getId()));
         }
 
@@ -222,7 +222,7 @@ public class NasaApodController {
                 log.info("=== GET NASA APOD BY ID ===");
                 log.info("ID: {}", id);
 
-                return nasaApodRepository.findById(id)
+                return nasaApodRepository.findById(java.util.Objects.requireNonNull(id))
                                 .doOnSuccess(query -> log.info("NASA APOD query found: {}", query))
                                 .switchIfEmpty(Mono.error(new ResponseStatusException(
                                                 HttpStatus.NOT_FOUND,
@@ -268,7 +268,7 @@ public class NasaApodController {
                 log.info("=== DELETE NASA APOD BY ID ===");
                 log.info("ID: {}", id);
 
-                return nasaApodRepository.findById(id)
+                return nasaApodRepository.findById(java.util.Objects.requireNonNull(id))
                                 .switchIfEmpty(Mono.error(new ResponseStatusException(
                                                 HttpStatus.NOT_FOUND,
                                                 "NASA APOD query not found with ID: " + id)))

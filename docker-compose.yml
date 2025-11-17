@@ -24,25 +24,31 @@ services:
 
   # Aplicación Spring Boot
   app:
-    build: .
+    image: ${APP_IMAGE:-luismencia/apis-ai-demos:latest}
+    # Para construir localmente en lugar de usar imagen de Docker Hub, descomenta:
+    # build: .
     container_name: apis-ai-demos-app
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "${APP_PORT:-8080}:${APP_PORT:-8080}"
     environment:
       # Configuración para la base de datos local
       SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/apisaidemos
       SPRING_R2DBC_USERNAME: admin
       SPRING_R2DBC_PASSWORD: admin123
       SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: ${APP_PORT:-8080}
       # Variables para las APIs externas (deberás configurar estas con tus claves)
       RAPIDAPI_APIKEY: ${RAPIDAPI_APIKEY:-3f797b008emsh2e4ad644606c6b8p18678cjsn053f92651618}
       NASA_APIKEY: ${NASA_APIKEY:-JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd}
     networks:
       - apis-ai-network
     restart: unless-stopped
+
+    # Endpoint GET público de ejemplo (accesible en host):
+    # http://localhost:${APP_PORT:-8080}/v1/api/ai-detection/health
 
 volumes:
   postgres_data:
