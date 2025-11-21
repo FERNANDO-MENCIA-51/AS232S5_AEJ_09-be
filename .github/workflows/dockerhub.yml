@@ -105,9 +105,7 @@ jobs:
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
-          cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
-          platforms: linux/amd64,linux/arm64
+          no-cache: true
 
       # 11. Mostrar información de la imagen
       - name: 📋 Image Information
