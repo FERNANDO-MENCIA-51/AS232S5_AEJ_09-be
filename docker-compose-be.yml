@@ -1,3 +1,16 @@
+# Endpoint GET público :
+# /v1/api/ai-detection/history
+# /v1/api/nasa-apod/history
+
+
+# Detener el contenedor
+
+# docker-compose -f docker-compose-be.yml down
+
+# # Reiniciar 
+
+# docker-compose -f docker-compose-be.yml up -d
+
 services:
   app:
     image: luismencia/apis-ai-demos:latest
@@ -14,21 +27,4 @@ services:
       NASA_APIKEY: JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd
     restart: unless-stopped
 
-# Endpoint GET público :
-# /v1/api/ai-detection/history
-# /v1/api/nasa-apod/history
 
-# Levantar el contenedor
-
-# docker-compose -f docker-compose-be.yml up -d
-
-
-# Detener el contenedor
-
-# docker-compose -f docker-compose-be.yml down
-
-# # Reiniciar 
-
-# docker-compose -f docker-compose-be.yml down 
-
-# docker-compose -f docker-compose-be.yml up -d
