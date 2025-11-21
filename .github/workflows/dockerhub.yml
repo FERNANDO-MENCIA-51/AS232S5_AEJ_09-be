@@ -88,13 +88,11 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       # 9. Login a Docker Hub
-      # NOTA: Configura DOCKER_USERNAME y DOCKER_TOKEN en GitHub Secrets
-      # para que el push a Docker Hub funcione
-      # - name: 🔐 Log in to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_TOKEN }}
+      - name: 🔐 Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       # 10. Build y Push de la imagen Docker
       - name: 🐳 Build and Push Docker Image
@@ -102,7 +100,7 @@ jobs:
         with:
           context: .
           dockerfile: Dockerfile
-          push: false
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           no-cache: true
