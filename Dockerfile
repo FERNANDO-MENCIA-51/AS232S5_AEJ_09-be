@@ -1,5 +1,6 @@
 # Usar una imagen base multi-stage para optimizar el tamaño
 # Primera etapa: Construcción
+# Actualizado: Configuración de Docker Compose con puertos configurables
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 # Instalar Maven
