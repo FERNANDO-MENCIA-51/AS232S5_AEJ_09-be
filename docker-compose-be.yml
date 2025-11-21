@@ -2,29 +2,26 @@
 # /v1/api/ai-detection/history
 # /v1/api/nasa-apod/history
 
-
 # Detener el contenedor
 
 # docker-compose -f docker-compose-be.yml down
 
-# # Reiniciar 
+# # Reiniciar
 
 # docker-compose -f docker-compose-be.yml up -d
 
 services:
   app:
-    image: luismencia/apis-ai-demos:latest
-    container_name: apis-ai-demos-app
+    image: luismencia/apis-ai-backend:latest
+    container_name: apis-ai-backend-app
     ports:
-      - "8080:8080" 
+      - "8080:8080"
     environment:
       SPRING_R2DBC_URL: r2dbc:postgresql://ep-billowing-queen-adp2gox4-pooler.c-2.us-east-1.aws.neon.tech:5432/neondb?sslmode=require
       SPRING_R2DBC_USERNAME: neondb_owner
       SPRING_R2DBC_PASSWORD: npg_Xy0FWDfi6AOt
       SPRING_PROFILES_ACTIVE: docker
-      SERVER_PORT: 8080 
+      SERVER_PORT: 8080
       RAPIDAPI_APIKEY: 3f797b008emsh2e4ad644606c6b8p18678cjsn053f92651618
       NASA_APIKEY: JR8yjMmoORyUHGaKOzLOGeWpNblx335ZXjFMXwRd
     restart: unless-stopped
-
-

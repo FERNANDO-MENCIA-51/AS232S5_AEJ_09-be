@@ -1,4 +1,4 @@
-name: Backend - Docker Hub CI/CD
+name: Build and Push to Docker Hub
 
 on:
   push:
@@ -11,119 +11,54 @@ on:
       - "pom.xml"
       - "Dockerfile"
       - ".github/workflows/dockerhub.yml"
-      # NO incluir docker-compose*.yml para evitar builds innecesarios
-  pull_request:
-    branches:
-      - main
-      - develop
-      - master
-    paths:
-      - "src/**"
-      - "pom.xml"
-      - "Dockerfile"
-      - ".github/workflows/dockerhub.yml"
-  workflow_dispatch: # Permite ejecutar manualmente el workflow
-
-env:
-  DOCKER_IMAGE: luismencia/apis-ai-demos/backend
-  JAVA_VERSION: "21"
+  workflow_dispatch:
 
 jobs:
-  build-and-push-backend:
-    name: 🚀 Build and Push Backend to Docker Hub
+  build-and-push:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout del código
-      - name: 📥 Checkout Repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Configurar JDK 21 para compilar el proyecto
-      - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: 21
           distribution: "temurin"
           cache: "maven"
 
-      # 3. Verificar versión de Java y Maven
-      - name: 🔍 Verify Java and Maven versions
-        run: |
-          java -version
-          mvn -version
-
-      # 4. Compilar y empaquetar con Maven
-      - name: 🔨 Build with Maven
+      - name: Build with Maven
         run: mvn clean package -DskipTests -B
 
-      # 5. Verificar que el JAR fue creado
-      - name: ✅ Verify JAR file
+      - name: Verify JAR file
         run: |
           ls -lh target/*.jar
           echo "JAR file created successfully!"
 
-      # 6. Extraer metadata para Docker (tags y labels)
-      - name: 🏷️ Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.DOCKER_IMAGE }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value={{date 'YYYYMMDD-HHmmss'}}
-          labels: |
-            org.opencontainers.image.title=APIs AI Demos Backend
-            org.opencontainers.image.description=Spring Boot WebFlux API for AI Detection and NASA APOD
-            org.opencontainers.image.vendor=Valle Grande
-
-      # 7. Set up QEMU para multi-platform builds
-      - name: 🔧 Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      # 8. Set up Docker Buildx
-      - name: 🔧 Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 9. Login a Docker Hub
-      - name: � Log in to DoDcker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: luismencia
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # 10. Build y Push de la imagen Docker
-      - name: 🐳 Build and Push Docker Image
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          no-cache: true
+          tags: luismencia/apis-ai-backend:latest
+          labels: |
+            org.opencontainers.image.title=APIs AI Backend
+            org.opencontainers.image.description=Spring Boot WebFlux API for AI Detection and NASA APOD
 
-      # 11. Mostrar información de la imagen
-      - name: 📋 Image Information
+      - name: Image Information
         run: |
           echo "✅ Docker image pushed successfully!"
-          echo "📦 Image: ${{ env.DOCKER_IMAGE }}"
-          echo "🏷️ Tags: ${{ steps.meta.outputs.tags }}"
-          echo "🔑 Digest: ${{ steps.meta.outputs.digest }}"
-
-      # 12. Crear resumen del job
-      - name: 📊 Job Summary
-        run: |
-          echo "## 🎉 Backend Build Successful!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📦 Docker Image Details" >> $GITHUB_STEP_SUMMARY
-          echo "- **Repository:** \`${{ env.DOCKER_IMAGE }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Tags:** \`${{ steps.meta.outputs.tags }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Digest:** \`${{ steps.meta.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🚀 Pull Command" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ${{ env.DOCKER_IMAGE }}:latest" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Image: luismencia/apis-ai-backend:latest"
+          echo "🔗 Docker Hub: https://hub.docker.com/r/luismencia/apis-ai-backend"
