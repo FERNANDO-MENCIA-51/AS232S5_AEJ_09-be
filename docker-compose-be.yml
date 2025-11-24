@@ -12,8 +12,8 @@
 
 services:
   app:
-    image: luismencia/apis-ai-backend:latest
-    container_name: apis-ai-backend-app
+    image: luismencia/fernando:latest
+    container_name: fernando-backend-app
     ports:
       - "8080:8080"
     environment:

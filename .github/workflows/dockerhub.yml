@@ -52,13 +52,13 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: luismencia/apis-ai-backend:latest
+          tags: luismencia/fernando:latest
           labels: |
-            org.opencontainers.image.title=APIs AI Backend
+            org.opencontainers.image.title=Fernando Backend
             org.opencontainers.image.description=Spring Boot WebFlux API for AI Detection and NASA APOD
 
       - name: Image Information
         run: |
           echo "✅ Docker image pushed successfully!"
-          echo "📦 Image: luismencia/apis-ai-backend:latest"
-          echo "🔗 Docker Hub: https://hub.docker.com/r/luismencia/apis-ai-backend"
+          echo "📦 Image: luismencia/fernando:latest"
+          echo "🔗 Docker Hub: https://hub.docker.com/r/luismencia/fernando"

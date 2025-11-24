@@ -1,6 +1,6 @@
 # Usar una imagen base multi-stage para optimizar el tamaño
 # Primera etapa: Construcción
-# Actualizado: Backend con endpoints POST funcionando correctamente
+# Backend APIs AI - Spring Boot WebFlux
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 # Instalar Maven
