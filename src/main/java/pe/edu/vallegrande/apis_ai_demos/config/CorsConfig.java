@@ -11,46 +11,31 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsWebFilter corsWebFilter() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
+        @Bean
+        public CorsWebFilter corsWebFilter() {
+                CorsConfiguration corsConfig = new CorsConfiguration();
 
-        // Permitir orígenes de Angular (desarrollo y producción)
-        corsConfig.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4200",
-                "http://localhost:4201",
-                "http://localhost:4202",
-                "http://127.0.0.1:4200",
-                "https://your-production-domain.com" // Cambia esto por tu dominio en producción
-        ));
+                // Permitir todos los orígenes (cualquier puerto)
+                corsConfig.addAllowedOriginPattern("*");
 
-        // Permitir todos los métodos HTTP
-        corsConfig.setAllowedMethods(Arrays.asList(
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE",
-                "PATCH",
-                "OPTIONS"));
+                // Permitir todos los métodos HTTP
+                corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
-        // Permitir todos los headers
-        corsConfig.setAllowedHeaders(Arrays.asList("*"));
+                // Permitir todos los headers
+                corsConfig.addAllowedHeader("*");
 
-        // Permitir credenciales
-        corsConfig.setAllowCredentials(true);
+                // Exponer todos los headers
+                corsConfig.addExposedHeader("*");
 
-        // Tiempo de cache para preflight requests
-        corsConfig.setMaxAge(3600L);
+                // Permitir credenciales
+                corsConfig.setAllowCredentials(true);
 
-        // Exponer headers adicionales si es necesario
-        corsConfig.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "X-Total-Count"));
+                // Tiempo de cache para preflight requests (1 hora)
+                corsConfig.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfig);
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", corsConfig);
 
-        return new CorsWebFilter(source);
-    }
+                return new CorsWebFilter(source);
+        }
 }
